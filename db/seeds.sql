@@ -1,0 +1,1 @@
+INSERT INTO `employee`.`employee` (`id`, `first_name`, `last_name`, `role_id`) VALUES ('3', 'Gerald', 'John', '3');
