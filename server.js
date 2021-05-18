@@ -40,6 +40,8 @@ function askQs() {
             addRole()
         } else if (answers.selectAction === 'Add Employee') {
             addEmployee()
+        } else if (answers.selectAction === 'Update Employee Role') {
+            updateEmployeeRole()
         }
 
     })
@@ -193,6 +195,66 @@ const addManager = async () => {
         // console.log(roleNames)
     })
     return results
+}
+
+const updateEmployeeRole = () => {
+    //find all employees
+    connection.query('SELECT * FROM employee', function(err, empResults) {
+
+        //find all the roles!
+        connection.query('SELECT * FROM role', function(err, roleResults) {
+
+            // do a for loop grab just the role title strings and put in a new array
+            const roleTitle = [];
+            for (let i = 0; i < roleResults.length; i++) {
+                roleTitle.push(roleResults[i].title) 
+            }
+            // do a for loop grab just the emp name strings and put in a new array
+            const employeeName = [];
+            for (let i = 0; i < empResults.length; i++) {
+                employeeName.push(empResults[i].first_name + empResults[i].last_name)                
+            }
+            // inquirere stuff!!
+            inquirer.prompt ([
+                {
+                    type: 'list',
+                    name: 'employee_name',
+                    message: 'Which employee do you want to update?',
+                    choices: employeeName
+                },
+                {
+                    type: 'list',
+                    name: 'role_title',
+                    message: 'What is their new role?',
+                    choices: roleTitle
+                }
+            ]).then( function(answers) {
+                var roleId;
+                for (let i = 0; i < roleResults.length; i++) {
+                    if (roleResults[i].title === answers.role_title) {
+                        roleId = roleResults[i].id
+                    }
+
+                }
+                var emplId;
+                for (let i = 0; i < empResults.length; i++) {
+                    if (empResults[i].first_name + empResults[i].last_name === answers.employee_name) {
+                        emplId = empResults[i].id
+                    }
+
+                }
+                console.log(roleId, emplId)
+
+                connection.query(`UPDATE employee SET role_id = ? WHERE id = ?`, [roleId, emplId], function(error, results) {
+                    
+                        if (error) throw error;
+                        askQs()
+                })
+            })
+        })
+    })
+
+  
 }
 
 
