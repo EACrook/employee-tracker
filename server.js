@@ -19,11 +19,9 @@ function askQs() {
             'View all employees',
             'View all departments',
             'View all roles',
-            'View all employees by manager',
             'Add Employee',
             'Add Department',
             'Add Role',
-            'Remove Employee',
             'Update Employee Role',
         ]
     }]).then(function (answers) {
@@ -132,8 +130,6 @@ const addEmployee = () => {
             for (let i = 0; i < managerResults.length; i++) {
                 managerNames.push(managerResults[i].first_name);
             }
-          //  console.log('manager names!!!!', managerResults)
-
 
             inquirer.prompt([{
                     type: 'input',
@@ -214,7 +210,7 @@ const updateEmployeeRole = () => {
             for (let i = 0; i < empResults.length; i++) {
                 employeeName.push(empResults[i].first_name + empResults[i].last_name)                
             }
-            // inquirere stuff!!
+            
             inquirer.prompt ([
                 {
                     type: 'list',
